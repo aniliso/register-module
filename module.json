@@ -1,0 +1,17 @@
+{
+    "name": "Register",
+    "alias": "register",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 1,
+    "providers": [
+        "Modules\\Register\\Providers\\RegisterServiceProvider",
+        "Modules\\Register\\Providers\\RouteServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "macros.php"
+    ],
+    "requires": []
+}
