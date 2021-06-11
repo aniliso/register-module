@@ -56,4 +56,8 @@ $router->group(['prefix' =>''], function (Router $router) {
         'as'   => 'register.form.files',
         'uses' => 'PublicController@files'
     ]);
+    $router->post(LaravelLocalization::transRoute('register::routes.register.rates'), [
+        'as'   => 'register.form.rates',
+        'uses' => 'PublicController@rates'
+    ]);
 });

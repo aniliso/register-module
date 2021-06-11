@@ -31,9 +31,9 @@ class FileController extends AdminBaseController
      */
     public function index()
     {
-        //$files = $this->file->all();
+        $files = $this->file->all();
 
-        return view('register::admin.files.index', compact(''));
+        return view('register::admin.files.index', compact('files'));
     }
 
     /**

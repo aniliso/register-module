@@ -40,15 +40,14 @@ class RegisterRegisterSidebar extends AbstractAdminSidebar
                         $this->auth->hasAccess('register.collaterals.index')
                     );
                 });
-//                $item->item(trans('register::files.title.files'), function (Item $item) {
-//                    $item->icon('fa fa-copy');
-//                    $item->weight(0);
-//                    $item->append('admin.register.file.create');
-//                    $item->route('admin.register.file.index');
-//                    $item->authorize(
-//                        $this->auth->hasAccess('register.files.index')
-//                    );
-//                });
+                $item->item(trans('register::files.title.files'), function (Item $item) {
+                    $item->icon('fa fa-copy');
+                    $item->weight(0);
+                    $item->route('admin.register.file.index');
+                    $item->authorize(
+                        $this->auth->hasAccess('register.files.index')
+                    );
+                });
 // append
 
 

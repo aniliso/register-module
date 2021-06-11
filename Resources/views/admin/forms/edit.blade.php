@@ -16,15 +16,44 @@
     <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-custom">
-                @include('partials.form-tab-headers')
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab_info" data-toggle="tab">Başvuru Bilgileri</a>
+                    </li>
+                    <li>
+                        <a href="#tab_collateral" data-toggle="tab">Teminat Türü</a>
+                    </li>
+                </ul>
                 <div class="tab-content">
-                    <?php $i = 0; ?>
-                    @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
-                        <?php $i++; ?>
-                        <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
-                            @include('register::admin.forms.partials.edit-fields', ['lang' => $locale])
+                    <div class="tab-pane active" id="tab_info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {!! Form::normalInput('company', trans('register::forms.form.company'), $errors, $form) !!}
+                            </div>
+                            <div class="col-md-6">
+                                {!! Form::normalInput('identity_no', trans('register::forms.form.identity_no'), $errors, $form) !!}
+                            </div>
                         </div>
-                    @endforeach
+                        <div class="row">
+                            <div class="col-md-6">
+                                {!! Form::normalInput('signatory', trans('register::forms.form.signatory'), $errors, $form) !!}
+                            </div>
+                            <div class="col-md-6">
+                                {!! Form::normalInput('email', trans('register::forms.form.email'), $errors, $form) !!}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {!! Form::normalInput('work_phone', trans('register::forms.form.work_phone'), $errors, $form, ['placeholder'=>'(555) 555 55 55']) !!}
+                            </div>
+                            <div class="col-md-6">
+                                {!! Form::normalInput('mobile_phone', trans('register::forms.form.mobile_phone'), $errors, $form, ['placeholder'=>'(555) 555 55 55']) !!}
+                            </div>
+                        </div>
+
+                        {!! Form::normalTextarea('shipping_address', trans('register::forms.form.shipping_address'), $errors, $form, ['class'=>'form-control', 'rows'=>4]) !!}
+                    </div>
+                    <div class="tab-pane" id="tab_collateral">deneme</div>
 
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.update') }}</button>

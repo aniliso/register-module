@@ -223,4 +223,22 @@ class PublicController extends BasePublicController
 
         return response()->json(['success'=>'You have successfully upload file.']);
     }
+
+    public function rates(Request $request)
+    {
+        if (empty($request->session()->get('form'))) {
+            return redirect()->route('register.form.step-1');
+        }
+
+        $monthly_consumption = $request->get('monthly_consumption');
+        $form = $request->session()->get('form');
+
+        $collateral = new CollateralService($form);
+        $form->monthly_consumption = $monthly_consumption;
+        $rate = $collateral->findRangeRate();
+
+        $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
+
+        return response()->json(['success'=>'Success', 'percent'=> $rate['percent'], 'price' => $discounted_price]);
+    }
 }

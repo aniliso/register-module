@@ -21,8 +21,7 @@ class Step1Request extends BaseFormRequest
             'signatory'        => 'required',
             'email'            => 'required|email',
             'work_phone'       => 'required',
-            'mobile_phone'     => 'required',
-            'shipping_address' => 'required'
+            'mobile_phone'     => 'required'
         ];
     }
 

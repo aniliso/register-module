@@ -28,7 +28,7 @@ return [
         'monthly_consumption' => 'Aylık Tüketim (TL)',
         'shipping_address'    => 'Automatic Kart Kargo Adresi',
         'credit_card'         => [
-            'name_surname'     => 'Adı Soyadı',
+            'name_surname'     => 'Ad Soyad',
             'bank'             => 'Banka',
             'no'               => 'Kredi Kartı No',
             'end_date'         => 'Kredi Kartı Son Kullanma Tarihi',
@@ -36,10 +36,17 @@ return [
             'phone'            => 'Kart Sahibi Telefon No',
             'address'          => 'Kart Sahibi Açık Adresi',
             'cv'               => 'CVV',
-            'cars_plate'       => 'Araç Plakaları'
+            'cars_plate'       => 'Araç Plakası',
+            'cars_brand'       => 'Marka',
+            'cars_model'       => 'Model',
+            'cars_department'  => 'Departman',
+            'cars_fuel'        => 'Yakıt',
+            'cars'             => 'Araçlar',
+            'cars_kit'         => 'Kit Tipi'
         ],
         'agreement1'          => 'KVKK Prosedürü',
-        'agreement2'          => 'Müşteri Aydınlatma Metni'
+        'agreement2'          => 'Müşteri Aydınlatma Metni',
+        'reference_no'        => 'Referans No'
     ],
     'messages'         => [
     ],

@@ -10,6 +10,7 @@ return [
       'finish' => 'tt-form/completed',
       'upload' => 'tt-form/upload',
       'remove' => 'tt-form/remove',
-      'files'  => 'tt-form/files'
+      'files'  => 'tt-form/files',
+      'rates'  => 'tt-form/rates'
   ]
 ];

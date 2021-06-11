@@ -60,7 +60,7 @@ class CollateralService
     public function findRangeRate()
     {
         $rates = $this->getRates();
-        $rate = $rates->where('range.start', '<=', $this->form->collateral_amount)->where('range.end', '>=', $this->form->collateral_amount)->first();
+        $rate = $rates->where('range.start', '<=', $this->form->monthly_consumption)->where('range.end', '>=', $this->form->monthly_consumption)->first();
         return $rate;
     }
 }

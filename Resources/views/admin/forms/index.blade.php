@@ -29,6 +29,11 @@
                     <table class="data-table table table-bordered table-hover">
                         <thead>
                         <tr>
+                            <th>{{ trans('register::forms.form.reference_no') }}</th>
+                            <th>{{ trans('register::forms.form.company') }}</th>
+                            <th>{{ trans('register::forms.form.work_phone') }}</th>
+                            <th>{{ trans('register::forms.form.mobile_phone') }}</th>
+                            <th>{{ trans('register::forms.form.collateral_id') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                         </tr>
@@ -37,6 +42,31 @@
                         <?php if (isset($forms)): ?>
                         <?php foreach ($forms as $form): ?>
                         <tr>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->reference_no }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->company }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->work_phone }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->mobile_phone }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->collateral->title }}
+                                </a>
+                            </td>
                             <td>
                                 <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
                                     {{ $form->created_at }}

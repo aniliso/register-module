@@ -1,17 +1,17 @@
 <?php
 
 return [
-    'list resource' => 'List files',
-    'create resource' => 'Create files',
-    'edit resource' => 'Edit files',
-    'destroy resource' => 'Destroy files',
+    'list resource' => 'Dosyları Listele',
+    'create resource' => 'Dosya Ekle',
+    'edit resource' => 'Dosya Düzenle',
+    'destroy resource' => 'Dosya Sil',
     'title' => [
-        'files' => 'Dosyalar',
-        'create file' => 'Create a file',
-        'edit file' => 'Edit a file',
+        'files' => 'Başvuru Belgeleri',
+        'create file' => 'Dosya Ekle',
+        'edit file' => 'Dosya Düzenle',
     ],
     'button' => [
-        'create file' => 'Create a file',
+        'create file' => 'Dosya Ekle',
     ],
     'table' => [
     ],
