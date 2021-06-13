@@ -3,6 +3,7 @@
 
 return [
   'title' => [
-      'registers' => 'TTS Online'
+      'registers' => 'TTS Online',
+      'heading'   => 'Vehicle Recognition System Online Application'
   ]
 ];

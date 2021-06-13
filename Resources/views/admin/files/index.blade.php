@@ -47,7 +47,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.register.file.edit', [$file->id]) }}">
-                                    {{ $file->form->company }}
+                                    {{ @$file->form->company }}
                                 </a>
                             </td>
                             <td>
