@@ -31,6 +31,7 @@
                         <tr>
                             <th>ID</th>
                             <th>{{ trans('register::collaterals.form.title') }}</th>
+                            <th>{{ trans('register::collaterals.form.code') }}</th>
                             <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                         </tr>
                         </thead>
@@ -46,6 +47,11 @@
                             <td>
                                 <a href="{{ route('admin.register.collateral.edit', [$collateral->id]) }}">
                                     {{ $collateral->title }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.collateral.edit', [$collateral->id]) }}">
+                                    {{ $collateral->code }}
                                 </a>
                             </td>
                             <td>

@@ -11,6 +11,6 @@ class File extends Model
 
     public function form()
     {
-        return $this->belongsTo(Form::class, 'id', 'form_id');
+        return $this->belongsTo(Form::class, 'form_id', 'id');
     }
 }

@@ -94,7 +94,10 @@ class FileController extends AdminBaseController
      */
     public function destroy(File $file)
     {
-        $this->file->destroy($file);
+        if ($this->file->destroy($file))
+        {
+            \File::delete(public_path('assets/register/').$file->name);
+        }
 
         return redirect()->route('admin.register.file.index')
             ->withSuccess(trans('core::core.messages.resource deleted', ['name' => trans('register::files.title.files')]));

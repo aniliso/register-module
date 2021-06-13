@@ -2,10 +2,12 @@
 
 namespace Modules\Register\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Internationalisation\BaseFormRequest;
 
-class Step4Request extends FormRequest
+class Step4Request extends BaseFormRequest
 {
+    protected $translationsAttributesKey = 'register::forms.form';
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,17 +16,27 @@ class Step4Request extends FormRequest
     public function rules()
     {
         return [
-            //
+            'file' => 'mimetypes:application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/pdf,image/jpeg,image/jpg,image/png,text/plain,text/richtext'
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    public function attributes()
+    {
+        return trans('register::forms.form');
+    }
+
     public function authorize()
     {
         return true;
+    }
+
+    public function messages()
+    {
+        return [];
+    }
+
+    public function translationMessages()
+    {
+        return [];
     }
 }

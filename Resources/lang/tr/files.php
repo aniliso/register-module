@@ -14,6 +14,7 @@ return [
         'create file' => 'Dosya Ekle',
     ],
     'table' => [
+        'filename' => 'Dosya Adı'
     ],
     'form' => [
     ],

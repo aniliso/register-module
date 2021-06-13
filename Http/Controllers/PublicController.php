@@ -14,6 +14,8 @@ use Modules\Register\Http\Requests\Step2Request;
 use Modules\Register\Http\Requests\Step3Request;
 use Modules\Register\Http\Requests\Step4Request;
 use Modules\Register\Http\Requests\Step5Request;
+use Modules\Register\Jobs\FormEmail;
+use Modules\Register\Jobs\FormPersonalEmail;
 use Modules\Register\Services\CollateralService;
 
 class PublicController extends BasePublicController
@@ -133,25 +135,35 @@ class PublicController extends BasePublicController
 
     public function postStep5(Step5Request $request)
     {
-        $form = $request->session()->get('form');
-        $form->fill($request->all());
-        $request->session()->put('form', $form);
+        try {
+            $form = $request->session()->get('form');
+            $form->fill($request->all());
+            $request->session()->put('form', $form);
 
-        $formComplete = $request->session()->get('form');
-        $formComplete->save();
+            $formComplete = $request->session()->get('form');
+            $formComplete->save();
 
-        $form_files = $request->session()->get('form_files');
-        $formComplete->files()->saveMany($form_files->all());
+            $form_files = $request->session()->get('form_files');
 
-        $request->session()->remove('form');
-        $request->session()->remove('form_files');
+            if($form_files) {
+                $formComplete->files()->saveMany($form_files->all());
+            }
 
-        return redirect()->route('register.form.finish');
+            FormPersonalEmail::dispatch($formComplete);
+            FormEmail::dispatch($formComplete);
+
+            $request->session()->remove('form');
+            $request->session()->remove('form_files');
+
+            return redirect()->route('register.form.finish');
+        } catch (\Exception $exception)
+        {
+            return redirect()->route('register.form.step-5')->withErrors($exception->getMessage());
+        }
     }
 
     public function finish()
     {
-
         $this->seo()->setTitle('Başvuru Tamamlandı - Taşıt Tanıma Sistemi Başvuru Formu')
             ->setDescription('Başvuru Tamamlandı - Taşıt Tanıma Sistemi Başvuru Formu');
 

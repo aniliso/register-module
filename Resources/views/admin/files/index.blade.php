@@ -29,7 +29,9 @@
                     <table class="data-table table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>{{ trans('core::core.table.filename') }}</th>
+                            <th>Başvuru No</th>
+                            <th>Başvuru Ad Soyad</th>
+                            <th>{{ trans('register::files.table.filename') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                         </tr>
@@ -38,6 +40,16 @@
                         <?php if (isset($files)): ?>
                         <?php foreach ($files as $file): ?>
                         <tr>
+                            <td>
+                                <a href="{{ route('admin.register.file.edit', [$file->id]) }}">
+                                    {{ $file->form_id }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.register.file.edit', [$file->id]) }}">
+                                    {{ $file->form->company }}
+                                </a>
+                            </td>
                             <td>
                                 <a href="{{ route('admin.register.file.edit', [$file->id]) }}">
                                     {{ $file->name }}

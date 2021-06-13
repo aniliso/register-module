@@ -29,6 +29,7 @@
                     <table class="data-table table table-bordered table-hover">
                         <thead>
                         <tr>
+                            <th>Başvuru No</th>
                             <th>{{ trans('register::forms.form.reference_no') }}</th>
                             <th>{{ trans('register::forms.form.company') }}</th>
                             <th>{{ trans('register::forms.form.work_phone') }}</th>
@@ -42,6 +43,11 @@
                         <?php if (isset($forms)): ?>
                         <?php foreach ($forms as $form): ?>
                         <tr>
+                            <td>
+                                <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
+                                    {{ $form->id }}
+                                </a>
+                            </td>
                             <td>
                                 <a href="{{ route('admin.register.form.edit', [$form->id]) }}">
                                     {{ $form->reference_no }}

@@ -16,6 +16,7 @@ class Step2Request extends BaseFormRequest
     public function rules()
     {
         $id = setting('register::credit-card');
+
         return [
             'collateral_id'                 => 'required',
             'credit_card.name_surname'      => "required_if:collateral_id,==,$id",

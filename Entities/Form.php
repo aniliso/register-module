@@ -8,7 +8,7 @@ class Form extends Model
 {
     protected $table = 'register__forms';
     protected $fillable = [
-        'company', 'identity_no', 'signatory', 'email', 'work_phone', 'mobile_phone', 'collateral_id', 'collateral_amount', 'monthly_consumption', 'credit_card', 'shipping_address', 'agreement1', 'agreement2'
+        'reference_no', 'company', 'identity_no', 'signatory', 'email', 'work_phone', 'mobile_phone', 'collateral_id', 'collateral_amount', 'monthly_consumption', 'credit_card', 'shipping_address', 'agreement1', 'agreement2'
     ];
     protected $casts = [
         'credit_card'            => 'object',

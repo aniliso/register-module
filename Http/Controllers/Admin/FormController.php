@@ -9,6 +9,7 @@ use Modules\Register\Http\Requests\CreateFormRequest;
 use Modules\Register\Http\Requests\UpdateFormRequest;
 use Modules\Register\Repositories\FormRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
+use Modules\Register\Services\CollateralService;
 
 class FormController extends AdminBaseController
 {
@@ -68,7 +69,10 @@ class FormController extends AdminBaseController
      */
     public function edit(Form $form)
     {
-        return view('register::admin.forms.edit', compact('form'));
+        $collateral = new CollateralService($form);
+        $rate = $collateral->findRangeRate();
+
+        return view('register::admin.forms.edit', compact('form', 'rate'));
     }
 
     /**
