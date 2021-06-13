@@ -14,6 +14,7 @@ return [
         'create file' => 'Create a file',
     ],
     'table' => [
+        'filename' => 'Filename'
     ],
     'form' => [
     ],

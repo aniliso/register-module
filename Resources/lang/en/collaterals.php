@@ -15,7 +15,11 @@ return [
     ],
     'table' => [
     ],
-    'form' => [
+    'form'             => [
+        'title' => 'Collateral Type',
+        'doc'   => 'Files',
+        'code'  => 'Code',
+        'rates' => 'Consumption Amount Table'
     ],
     'messages' => [
     ],

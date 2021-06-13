@@ -11,7 +11,9 @@ return [
         'edit form'   => 'Başvuru Düzenle',
     ],
     'button'           => [
-        'create form' => 'Başvuru Ekle',
+        'create form'   => 'Başvuru Ekle',
+        'next'          => 'İleri',
+        'complete form' => 'Başvuruyu Tamamla',
     ],
     'table'            => [
     ],
@@ -52,4 +54,11 @@ return [
     ],
     'validation'       => [
     ],
+    'stepper'          => [
+        'step-1' => 'Başvuru Bilgileri',
+        'step-2' => 'Teminat Türü',
+        'step-3' => 'Teminat/Tüketim',
+        'step-4' => 'Başvuru Belgeleri',
+        'step-5' => 'Başvuru Tamamla'
+    ]
 ];
