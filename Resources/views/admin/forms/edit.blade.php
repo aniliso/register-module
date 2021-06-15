@@ -364,7 +364,8 @@
                                                                     <p>
                                                                         {{ $car->department }}<br/>
                                                                         {{ $car->brand.' '.$car->model }}<br/>
-                                                                        {{ $car->fuel }}
+                                                                        {{ $car->fuel }}<br/>
+                                                                        {{ $car->kit }}
                                                                     </p>
                                                                 </div>
                                                             </div>

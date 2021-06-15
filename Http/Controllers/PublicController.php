@@ -2,13 +2,12 @@
 
 namespace Modules\Register\Http\Controllers;
 
-use Doctrine\DBAL\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\Core\Http\Controllers\BasePublicController;
-use Modules\Page\Entities\Page;
 use Modules\Register\Entities\File;
 use Modules\Register\Entities\Form;
+use Modules\Register\Exceptions\FormSessionException;
 use Modules\Register\Http\Requests\Step1Request;
 use Modules\Register\Http\Requests\Step2Request;
 use Modules\Register\Http\Requests\Step3Request;
@@ -51,91 +50,114 @@ class PublicController extends BasePublicController
 
     public function step2(Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $form = $request->session()->get('form');
+
+            $this->seo()->setTitle('Teminat Türü - Taşıt Tanıma Sistemi Başvuru Formu')
+                ->setDescription('Teminat Türü - Taşıt Tanıma Sistemi Başvuru Formu');
+
+            return view('register::step-2', compact('form'));
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $form = $request->session()->get('form');
-
-        $this->seo()->setTitle('Teminat Türü - Taşıt Tanıma Sistemi Başvuru Formu')
-            ->setDescription('Teminat Türü - Taşıt Tanıma Sistemi Başvuru Formu');
-
-        return view('register::step-2', compact('form'));
     }
 
     public function postStep2(Step2Request $request)
     {
-        $form = $request->session()->get('form');
-        $form->fill($request->all());
+        try {
+            $this->returnStep1($request);
 
-        if($request->get('collateral_id') !== setting('register::credit-card')) {
-            $form->credit_card = null;
+            $form = $request->session()->get('form');
+            $form->fill($request->all());
+
+            if($request->get('collateral_id') !== setting('register::credit-card')) {
+                $form->credit_card = null;
+            }
+
+            $request->session()->put('form', $form);
+
+            return redirect()->route('register.form.step-3');
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $request->session()->put('form', $form);
-
-        return redirect()->route('register.form.step-3');
     }
 
     public function step3(Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $form = $request->session()->get('form');
+
+            $this->seo()->setTitle('Teminat/Tüketim - Taşıt Tanıma Sistemi Başvuru Formu')
+                ->setDescription('Teminat/Tüketim - Taşıt Tanıma Sistemi Başvuru Formu');
+
+            return view('register::step-3', compact('form'));
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $form = $request->session()->get('form');
-
-        $this->seo()->setTitle('Teminat/Tüketim - Taşıt Tanıma Sistemi Başvuru Formu')
-            ->setDescription('Teminat/Tüketim - Taşıt Tanıma Sistemi Başvuru Formu');
-
-        return view('register::step-3', compact('form'));
     }
 
     public function postStep3(Step3Request $request)
     {
-        $form = $request->session()->get('form');
-        $form->fill($request->all());
-        $request->session()->put('form', $form);
+        try {
+            $this->returnStep1($request);
 
-        return redirect()->route('register.form.step-4');
+            $form = $request->session()->get('form');
+            $form->fill($request->all());
+            $request->session()->put('form', $form);
+
+            return redirect()->route('register.form.step-4');
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        }
     }
 
     public function step4(Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $form = $request->session()->get('form');
+            $form_files = $request->session()->get('form_files');
+
+            $this->seo()->setTitle('Başvuru Belgeleri - Taşıt Tanıma Sistemi Başvuru Formu')
+                ->setDescription('Başvuru Belgeleri - Taşıt Tanıma Sistemi Başvuru Formu');
+
+            return view('register::step-4', compact('form', 'form_files'));
+
+        }  catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $form = $request->session()->get('form');
-        $form_files = $request->session()->get('form_files');
-
-        $this->seo()->setTitle('Başvuru Belgeleri - Taşıt Tanıma Sistemi Başvuru Formu')
-            ->setDescription('Başvuru Belgeleri - Taşıt Tanıma Sistemi Başvuru Formu');
-
-        return view('register::step-4', compact('form', 'form_files'));
     }
 
     public function step5(Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $form = $request->session()->get('form');
+            $form_files = $request->session()->get('form_files');
+
+            $collateral = new CollateralService($form);
+            $rate = $collateral->findRangeRate();
+
+            $this->seo()->setTitle('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu')
+                ->setDescription('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu');
+
+            return view('register::step-5', compact('form', 'form_files', 'rate'));
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $form = $request->session()->get('form');
-        $form_files = $request->session()->get('form_files');
-
-        $collateral = new CollateralService($form);
-        $rate = $collateral->findRangeRate();
-
-        $this->seo()->setTitle('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu')
-            ->setDescription('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu');
-
-        return view('register::step-5', compact('form', 'form_files', 'rate'));
     }
 
     public function postStep5(Step5Request $request)
     {
         try {
+            $this->returnStep1($request);
+
             $form = $request->session()->get('form');
             $form->fill($request->all());
             $request->session()->put('form', $form);
@@ -152,12 +174,13 @@ class PublicController extends BasePublicController
             FormPersonalEmail::dispatch($formComplete);
             FormEmail::dispatch($formComplete);
 
-            $request->session()->remove('form');
-            $request->session()->remove('form_files');
+//            $request->session()->remove('form');
+//            $request->session()->remove('form_files');
 
             return redirect()->route('register.form.finish');
-        } catch (\Exception $exception)
-        {
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        } catch (\Exception $exception) {
             return redirect()->route('register.form.step-5')->withErrors($exception->getMessage());
         }
     }
@@ -252,5 +275,13 @@ class PublicController extends BasePublicController
         $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
 
         return response()->json(['success'=>'Success', 'percent'=> $rate['percent'], 'price' => $discounted_price]);
+    }
+
+    private function returnStep1(Request $request)
+    {
+        if (empty($request->session()->get('form'))) {
+            throw new FormSessionException("Form bilgileri sağlanamadı");
+        }
+        return true;
     }
 }

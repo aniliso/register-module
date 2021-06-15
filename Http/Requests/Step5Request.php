@@ -37,7 +37,7 @@ class Step5Request extends BaseFormRequest
 
     public function messages()
     {
-        return [];
+        return trans('validation');
     }
 
     public function translationMessages()

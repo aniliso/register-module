@@ -38,7 +38,7 @@ class FormNotified extends Mailable
 
         return $this->markdown('register::mails.form-notified')
             ->replyTo(setting('register::email'), setting('themes::company-name', locale()))
-            ->subject(setting('themes::company-name').' - '.$form->id.' no.lu Taşıt Tanıma Sistemi Başvurusu')
+            ->subject(setting('theme::company-name', locale()).' - '.$form->id.' no.lu Taşıt Tanıma Sistemi Başvurusu')
             ->with(compact('form'));
     }
 }
