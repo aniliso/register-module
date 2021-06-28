@@ -20,19 +20,19 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="#tab_info" data-toggle="tab">Başvuru Bilgileri</a>
+                                <a href="#tab_info" data-toggle="tab">@lang('register::forms.stepper.step-1')</a>
                             </li>
                             <li>
-                                <a href="#tab_collateral" data-toggle="tab">Teminat Türü</a>
+                                <a href="#tab_collateral" data-toggle="tab">@lang('register::forms.stepper.step-2')</a>
                             </li>
                             <li>
-                                <a href="#tab_consumption" data-toggle="tab">Teminat/Tüketim</a>
+                                <a href="#tab_consumption" data-toggle="tab">@lang('register::forms.stepper.step-3')</a>
                             </li>
                             <li>
-                                <a href="#tab_files" data-toggle="tab">Başvuru Belgeleri</a>
+                                <a href="#tab_files" data-toggle="tab">@lang('register::forms.stepper.step-4')</a>
                             </li>
                             <li>
-                                <a href="#tab_results" data-toggle="tab">Başvuru Önizleme</a>
+                                <a href="#tab_results" data-toggle="tab">@lang('register::forms.stepper.step-5')</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -158,24 +158,12 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.department')) has-error @endif">
-                                                        <label for="department"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_department')</label>
-                                                        <select id="department" :name="'credit_card[cars]['+key+'][department]'"
-                                                                class="form-control" v-model="car.department">
-                                                            <option v-for="department in departments" :value="department">@{{
-                                                                department }}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div>
                                                     <div class="form-group @if($errors->first('credit_card.cars.*.fuel')) has-error @endif">
                                                         <label for="fuel"
                                                                v-if="key == 0">@lang('register::forms.form.credit_card.cars_fuel')</label>
                                                         <select id="fuel" :name="'credit_card[cars]['+key+'][fuel]'"
                                                                 class="form-control" v-model="car.fuel">
-                                                            <option v-for="fuel in fuels" :value="fuel">@{{ fuel }}</option>
+                                                            <option v-for="(fuel, index) in fuels" :value="index">@{{ fuel }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -185,7 +173,7 @@
                                                                v-if="key == 0">@lang('register::forms.form.credit_card.cars_kit')</label>
                                                         <select id="kit" :name="'credit_card[cars]['+key+'][kit]'"
                                                                 class="form-control" v-model="car.kit">
-                                                            <option v-for="kit in kits" :value="kit">@{{ kit }}</option>
+                                                            <option v-for="(kit, index) in kits" :value="index">@{{ kit }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -302,13 +290,7 @@
                                             <th>@lang('register::forms.form.work_phone') :</th>
                                             <td>: {{ $form->work_phone }}</td>
                                             <th>@lang('register::forms.form.mobile_phone') :</th>
-                                            <td>: {{ $form->work_phone }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>@lang('register::forms.form.shipping_address')</th>
-                                            <td>: {{ $form->shipping_address }}</td>
-                                            <td>&nbsp</td>
-                                            <td>&nbsp;</td>
+                                            <td>: {{ $form->mobile_phone }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -331,7 +313,7 @@
                                             </tr>
                                             <tr>
                                                 <th>@lang('register::forms.form.credit_card.no')</th>
-                                                <td>: {!! str_pad(substr($form->credit_card->no, -9), strlen($form->credit_card->no), '*', STR_PAD_LEFT); !!}</td>
+                                                <td>: {!! str_pad(substr($form->credit_card->no, -7), strlen($form->credit_card->no), '*', STR_PAD_LEFT); !!}</td>
                                             </tr>
                                             <tr>
                                                 <th>@lang('register::forms.form.credit_card.end_date')</th>
@@ -362,7 +344,6 @@
                                                                 <div style="padding: 10px 20px" class="thumbnail">
                                                                     <h4>{{ $car->plate }}</h4>
                                                                     <p>
-                                                                        {{ $car->department }}<br/>
                                                                         {{ $car->brand.' '.$car->model }}<br/>
                                                                         {{ $car->fuel }}<br/>
                                                                         {{ $car->kit }}
@@ -429,7 +410,7 @@
                                 @endif
 
                                 @if(isset($form->credit_card->cars))
-                                    @if(array_search("Automatic Kart", array_column($form->credit_card->cars, "kit")) !== false)
+                                    @if(array_search("1", array_column($form->credit_card->cars, "kit")) !== false)
                                         {!! Form::normalTextarea('shipping_address', trans('register::forms.form.shipping_address'), $errors, $form, ['class'=>'form-control', 'rows'=>4]) !!}
                                     @endif
                                 @endif
@@ -484,17 +465,15 @@
                 collateral_id: '{{ old('collateral_id', $form->collateral_id) }}',
                 credit_card: '{{ setting('register::credit-card') }}',
                 collateral_types: {!! $collateralTypes !!},
-                cars: {!! old('credit_card.cars', @$form->credit_card->cars) ? json_encode(old('credit_card.cars', @$form->credit_card->cars)) : "[{ plate:'', brand: '', model:'', fuel: 'Benzin', department: 'Yönetim', kit: 'Automatic Kart', }]" !!},
-                fuels: ['Benzin', 'Dizel', 'LPG'],
-                departments: ['Yönetim', 'Muhasebe ve Finans', 'Pazarlama', 'Dış Ticaret', 'İnsan Kaynakları', 'Lojistik', 'Ar-Ge', 'IT', 'Basın Medya'],
-                kits: ['Automatic Kart', 'Taşıt Tanıma']
+                cars: {!! old('credit_card.cars', @$form->credit_card->cars) ? json_encode(old('credit_card.cars', @$form->credit_card->cars)) : "[{ plate:'', brand: '', model: '', fuel: '1', kit: '1', }]" !!},
+                fuels: {!! $fuelTypes->toJson() !!},
+                kits: {!! $kitTypes->toJson() !!}
             },
             methods: {
                 addRow: function (index, id) {
                     this.cars.splice(index + 1, 0, {});
-                    this.cars[index + 1].fuel = 'Benzin';
-                    this.cars[index + 1].department = 'Yönetim';
-                    this.cars[index + 1].kit = 'Automatic Kart';
+                    this.cars[index + 1].fuel = '1';
+                    this.cars[index + 1].kit = '1';
                 },
                 removeRow: function (index, id) {
                     this.cars.splice(index, 1);

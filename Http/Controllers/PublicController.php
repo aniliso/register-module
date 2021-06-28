@@ -16,9 +16,22 @@ use Modules\Register\Http\Requests\Step5Request;
 use Modules\Register\Jobs\FormEmail;
 use Modules\Register\Jobs\FormPersonalEmail;
 use Modules\Register\Services\CollateralService;
+use Themelogy\MobileService\Exceptions\ValidateCodeException;
+use Themelogy\MobileService\MobileService;
 
 class PublicController extends BasePublicController
 {
+    /**
+     * @var MobileService
+     */
+    private $mobileService;
+
+    public function __construct(MobileService $mobileService)
+    {
+        parent::__construct();
+        $this->mobileService = $mobileService;
+    }
+
     /**
      * Display a listing of the resource.
      * @return Response
@@ -72,7 +85,7 @@ class PublicController extends BasePublicController
             $form = $request->session()->get('form');
             $form->fill($request->all());
 
-            if($request->get('collateral_id') !== setting('register::credit-card')) {
+            if ($request->get('collateral_id') !== setting('register::credit-card')) {
                 $form->credit_card = null;
             }
 
@@ -128,7 +141,7 @@ class PublicController extends BasePublicController
 
             return view('register::step-4', compact('form', 'form_files'));
 
-        }  catch (FormSessionException $exception) {
+        } catch (FormSessionException $exception) {
             return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
     }
@@ -139,16 +152,23 @@ class PublicController extends BasePublicController
             $this->returnStep1($request);
 
             $form = $request->session()->get('form');
+
             $form_files = $request->session()->get('form_files');
 
-            $collateral = new CollateralService($form);
-            $rate = $collateral->findRangeRate();
+            if ($form->collateral_id) {
+                $collateral = new CollateralService($form);
+                $rate = $collateral->findRangeRate();
+            } else {
+                throw new \Exception("Teminat Türü Seçmediniz");
+            }
 
             $this->seo()->setTitle('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu')
                 ->setDescription('Başvuruyu Tamamla - Taşıt Tanıma Sistemi Başvuru Formu');
 
             return view('register::step-5', compact('form', 'form_files', 'rate'));
         } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        } catch (\Exception $exception) {
             return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
     }
@@ -159,29 +179,86 @@ class PublicController extends BasePublicController
             $this->returnStep1($request);
 
             $form = $request->session()->get('form');
+
             $form->fill($request->all());
             $request->session()->put('form', $form);
 
-            $formComplete = $request->session()->get('form');
-            $formComplete->save();
-
-            $form_files = $request->session()->get('form_files');
-
-            if($form_files) {
-                $formComplete->files()->saveMany($form_files->all());
-            }
-
-            FormPersonalEmail::dispatch($formComplete);
-            FormEmail::dispatch($formComplete);
-
-//            $request->session()->remove('form');
-//            $request->session()->remove('form_files');
-
-            return redirect()->route('register.form.finish');
+            return redirect()->route('register.form.verification');
         } catch (FormSessionException $exception) {
             return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         } catch (\Exception $exception) {
             return redirect()->route('register.form.step-5')->withErrors($exception->getMessage());
+        }
+    }
+
+    public function verification(Request $request)
+    {
+        try {
+            $this->returnStep1($request);
+            $this->mobileService->checkAuth();
+            return view('register::verification');
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage(), 'exception');
+        } catch (\Exception $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage(), 'exception');
+        }
+    }
+
+    public function postCode(Request $request)
+    {
+        try {
+            $this->returnStep1($request);
+            $form = $request->session()->get('form');
+
+            if (!$this->mobileService->getVerificationCode($form->present()->mobile_phone)) {
+                $this->mobileService->sendVerificationCode($form->present()->mobile_phone);
+                $message = "Doğrulama kodu mesajı başarıyla gönderildi.";
+            } else {
+                $message = "Doğrulama kodu mesajınızı henüz doğrulamadınız. Lütfen kısa mesajınızın gelmesini bekleyiniz";
+            }
+            return response()->json(['success' => true, 'message' => $message]);
+
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => 'Doğrulama kodu gönderilirken bir hata oluştu. Tekrar deneyiniz.', Response::HTTP_BAD_REQUEST]);
+        }
+    }
+
+    public function postValidate(Request $request)
+    {
+        try {
+            $this->returnStep1($request);
+            $form = $request->session()->get('form');
+            $code = $request->get('verificationCode');
+            if($response = $this->mobileService->validateVerificationCode($form->present()->mobile_phone, $code)) {
+                $formComplete = $request->session()->get('form');
+                $formComplete->save();
+
+                $form_files = $request->session()->get('form_files');
+
+                if ($form_files) {
+                    $formComplete->files()->saveMany($form_files->all());
+                }
+
+                FormPersonalEmail::dispatch($formComplete);
+                FormEmail::dispatch($formComplete);
+
+                $request->session()->remove('form');
+                $request->session()->remove('form_files');
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $response
+            ]);
+
+        } catch (FormSessionException $e) {
+            return redirect()->route('register.form.step-1')->withErrors($e->getMessage());
+        } catch (ValidateCodeException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -196,67 +273,78 @@ class PublicController extends BasePublicController
     public function remove(Request $request)
     {
         try {
+            $this->returnStep1($request);
+
             $fileName = $request->get('name');
 
-            \File::delete(public_path('assets/register/').$fileName);
+            \File::delete(public_path('assets/register/') . $fileName);
 
             $form = $request->session()->get('form_files');
 
-            $key = $form->search(function($item) use ($fileName){
-                return $item->name ==  $fileName;
+            $key = $form->search(function ($item) use ($fileName) {
+                return $item->name == $fileName;
             });
 
             $form->pull($key);
 
-            return response()->json(['success'=>'You have successfully deleted file.']);
+            return response()->json(['success' => 'You have successfully deleted file.']);
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         } catch (\Exception $exception) {
-            return response()->json(['error'=>$exception->getMessage()]);
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
     }
 
     public function files(Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $form = $request->session()->get('form_files');
+            return response()->json($form);
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        } catch (\Exception $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $form = $request->session()->get('form_files');
-
-        return response()->json($form);
     }
 
     public function upload(Step4Request $request)
     {
-        if (empty($request->session()->get('form'))) {
-            return redirect()->route('register.form.step-1');
+        try {
+            $this->returnStep1($request);
+
+            $fileName = time() . '_' . $request->file->getClientOriginalName();
+            $fileType = $request->file->getMimeType();
+            $path = $request->file->move(public_path('assets/register'), $fileName);
+            $fileSize = \File::size($path);
+
+            if (empty($request->session()->get('form_files'))) {
+                $files = collect();
+                $file = new File([
+                    'name' => $fileName,
+                    'type' => $fileType,
+                    'size' => $fileSize
+                ]);
+                $files->push($file);
+                $request->session()->put('form_files', $files);
+            } else {
+                $form = $request->session()->get('form_files');
+                $file = new File([
+                    'name' => $fileName,
+                    'type' => $fileType,
+                    'size' => $fileSize
+                ]);
+                $form->push($file);
+                $request->session()->put('form_files', $form);
+            }
+
+            return response()->json(['success' => 'You have successfully upload file.']);
+        } catch (FormSessionException $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
+        } catch (\Exception $exception) {
+            return redirect()->route('register.form.step-1')->withErrors($exception->getMessage());
         }
-
-        $fileName = time().'_'.$request->file->getClientOriginalName();
-        $fileType = $request->file->getMimeType();
-        $path = $request->file->move(public_path('assets/register'), $fileName);
-        $fileSize = \File::size($path);
-
-        if (empty($request->session()->get('form_files'))) {
-            $files = collect();
-            $file = new File([
-                'name' => $fileName,
-                'type' => $fileType,
-                'size' => $fileSize
-            ]);
-            $files->push($file);
-            $request->session()->put('form_files', $files);
-        } else {
-            $form = $request->session()->get('form_files');
-            $file = new File([
-                'name' => $fileName,
-                'type' => $fileType,
-                'size' => $fileSize
-            ]);
-            $form->push($file);
-            $request->session()->put('form_files', $form);
-        }
-
-        return response()->json(['success'=>'You have successfully upload file.']);
     }
 
     public function rates(Request $request)
@@ -274,7 +362,7 @@ class PublicController extends BasePublicController
 
         $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
 
-        return response()->json(['success'=>'Success', 'percent'=> $rate['percent'], 'price' => $discounted_price]);
+        return response()->json(['success' => 'Success', 'percent' => $rate['percent'], 'price' => $discounted_price]);
     }
 
     private function returnStep1(Request $request)

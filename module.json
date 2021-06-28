@@ -9,7 +9,9 @@
         "Modules\\Register\\Providers\\RegisterServiceProvider",
         "Modules\\Register\\Providers\\RouteServiceProvider"
     ],
-    "aliases": {},
+    "aliases": {
+        "MobileService" : "\\Themelogy\\MobileService\\Facades\\MobileServiceFacade"
+    },
     "files": [
         "macros.php"
     ],

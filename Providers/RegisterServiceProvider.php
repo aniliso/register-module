@@ -7,6 +7,9 @@ use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Traits\CanGetSidebarClassForModule;
 use Modules\Register\Composers\CollateralComposer;
+use Modules\Register\Composers\FormTypesComposer;
+use Modules\Register\Contracts\FuelTypes;
+use Modules\Register\Contracts\KitTypes;
 use Modules\Register\Events\Handlers\RegisterRegisterSidebar;
 
 class RegisterServiceProvider extends ServiceProvider
@@ -34,6 +37,8 @@ class RegisterServiceProvider extends ServiceProvider
         });
 
         view()->composer('register::*', CollateralComposer::class);
+        view()->composer('register::*', FormTypesComposer::class);
+
 
         $this->app['events']->listen(
             BuildingSidebar::class,

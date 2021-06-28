@@ -40,6 +40,18 @@ $router->group(['prefix' =>''], function (Router $router) {
         'as'   => 'register.form.step-5.put',
         'uses' => 'PublicController@postStep5'
     ]);
+    $router->get(LaravelLocalization::transRoute('register::routes.register.verification'), [
+        'as'   => 'register.form.verification',
+        'uses' => 'PublicController@verification'
+    ]);
+    $router->post(LaravelLocalization::transRoute('register::routes.register.code'), [
+        'as'   => 'register.form.code',
+        'uses' => 'PublicController@postCode'
+    ]);
+    $router->post(LaravelLocalization::transRoute('register::routes.register.validate'), [
+        'as'   => 'register.form.validate',
+        'uses' => 'PublicController@postValidate'
+    ]);
     $router->get(LaravelLocalization::transRoute('register::routes.register.finish'), [
         'as'   => 'register.form.finish',
         'uses' => 'PublicController@finish'

@@ -31,7 +31,6 @@ class Step2Request extends BaseFormRequest
             'credit_card.cars.*.plate'      => "required_if:collateral_id,==,$id",
             'credit_card.cars.*.brand'      => 'required_with:credit_card.cars.*.plate',
             'credit_card.cars.*.model'      => 'required_with:credit_card.cars.*.plate',
-            'credit_card.cars.*.department' => 'required_with:credit_card.cars.*.plate',
             'credit_card.cars.*.fuel'       => 'required_with:credit_card.cars.*.plate',
             'credit_card.cars.*.kit'        => 'required_with:credit_card.cars.*.plate',
         ];

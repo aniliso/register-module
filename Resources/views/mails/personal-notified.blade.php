@@ -8,6 +8,7 @@
 # Firma Bilgileri
 |          |         |
 | :------- | :------ |
+| @lang('register::forms.form.reference_no') | {{ $form->reference_no }} |
 | @lang('register::forms.form.company') | {{ $form->company }} |
 | @lang('register::forms.form.identity_no') | {{ $form->identity_no }} |
 | @lang('register::forms.form.signatory') | {{ $form->signatory }} |
@@ -30,10 +31,10 @@
 | @lang('register::forms.form.credit_card.address') | {!! $form->credit_card->address !!} |
 @if(isset($form->credit_card->cars))
 # Araçlar
-| @lang('register::forms.form.credit_card.cars_plate') | @lang('register::forms.form.credit_card.cars_department') | @lang('register::forms.form.credit_card.cars_brand') | @lang('register::forms.form.credit_card.cars_model') | @lang('register::forms.form.credit_card.cars_fuel') | @lang('register::forms.form.credit_card.cars_kit') |
-| :------- | :------ | :------- | :------ | :------- | :------ |
+| @lang('register::forms.form.credit_card.cars_plate') | @lang('register::forms.form.credit_card.cars_brand') | @lang('register::forms.form.credit_card.cars_model') | @lang('register::forms.form.credit_card.cars_fuel') | @lang('register::forms.form.credit_card.cars_kit') |
+| :------- | :------- | :------ | :------- | :------ |
 @foreach($form->credit_card->cars as $car)
-| {{ $car->plate }} | {{ $car->department }} | {{ $car->brand }} | {{ $car->model }} | {{ $car->fuel }} | {{ $car->kit }} |
+| {{ $car->plate }} | {{ $car->brand }} | {{ $car->model }} | {{ $fuelTypes->get($car->fuel) }} | {{ $kitTypes->get($car->kit) }} |
 @endforeach
 @endif
 @endif

@@ -1,0 +1,13 @@
+{
+  "name": "Register",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://aniliso@github.com/aniliso/register-module.git",
+  "author": "Visualturk <designer@visualturk.net>",
+  "license": "MIT",
+  "dependencies": {
+    "vue-awesome-countdown": "^1.1.4",
+    "vue-sweetalert2": "^4.3.1",
+    "vue-verification-code-input": "^1.0.0"
+  }
+}
