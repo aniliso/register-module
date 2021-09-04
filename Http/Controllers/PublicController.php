@@ -195,7 +195,7 @@ class PublicController extends BasePublicController
     {
         try {
             $this->returnStep1($request);
-            $this->mobileService->checkAuth();
+//            $this->mobileService->checkAuth();
 
             $this->seo()->setTitle('Doğrulama Kodu - Taşıt Tanıma Sistemi Başvuru Formu')
                 ->setDescription('Doğrulama Kodu - Taşıt Tanıma Sistemi Başvuru Formu');
