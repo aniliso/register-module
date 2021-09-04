@@ -41,8 +41,10 @@ class FormPersonalNotified extends Mailable
         $rate = $collateral->findRangeRate();
 
         if(isset($rate['file'])) {
-            $path = public_path($rate['file']['path']);
-            $this->attach($path);
+            foreach ($rate['file'] as $file) {
+                $path = public_path($file['path']);
+                $this->attach($path);
+            }
         }
 
         if($form->files()->count()>0) {
