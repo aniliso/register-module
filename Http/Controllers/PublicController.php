@@ -196,6 +196,10 @@ class PublicController extends BasePublicController
         try {
             $this->returnStep1($request);
             $this->mobileService->checkAuth();
+
+            $this->seo()->setTitle('Doğrulama Kodu - Taşıt Tanıma Sistemi Başvuru Formu')
+                ->setDescription('Doğrulama Kodu - Taşıt Tanıma Sistemi Başvuru Formu');
+
             return view('register::verification');
         } catch (FormSessionException $exception) {
             return redirect()->route('register.form.step-1')->withErrors($exception->getMessage(), 'exception');

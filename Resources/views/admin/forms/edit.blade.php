@@ -126,53 +126,53 @@
                                 </transition>
 
                                 <transition name="slide-fade">
-                                    <fieldset v-if="collateral_id == credit_card">
+                                    <fieldset v-if="collateral_id.length !== 0">
                                         <legend>Araç Bilgisi</legend>
-                                        <template v-for="(car, key) in cars">
+                                        <template v-for="(vehicle, key) in vehicles">
                                             <div class="credit_card-cars">
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.plate')) has-error @endif">
+                                                    <div class="form-group @if($errors->first('vehicles.*.plate')) has-error @endif">
                                                         <label for="plate"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_plate')</label>
-                                                        <input id="plate" :name="'credit_card[cars]['+key+'][plate]'"
-                                                               placeholder="@lang('register::forms.form.credit_card.cars_plate')"
-                                                               class="form-control input-sm" v-model="car.plate"/>
+                                                               v-if="key == 0">@lang('register::forms.form.vehicles.plate')</label>
+                                                        <input id="plate" :name="'vehicles['+key+'][plate]'"
+                                                               placeholder="@lang('register::forms.form.vehicles.plate')"
+                                                               class="form-control input-sm" v-model="vehicle.plate"/>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.brand')) has-error @endif">
+                                                    <div class="form-group @if($errors->first('vehicles.*.brand')) has-error @endif">
                                                         <label for="brand"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_brand')</label>
-                                                        <input id="brand" :name="'credit_card[cars]['+key+'][brand]'"
-                                                               placeholder="@lang('register::forms.form.credit_card.cars_brand')"
-                                                               class="form-control input-sm" v-model="car.brand"/>
+                                                               v-if="key == 0">@lang('register::forms.form.vehicles.brand')</label>
+                                                        <input id="brand" :name="'vehicles['+key+'][brand]'"
+                                                               placeholder="@lang('register::forms.form.vehicles.brand')"
+                                                               class="form-control input-sm" v-model="vehicle.brand"/>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.model')) has-error @endif">
-                                                        <label for="brand"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_model')</label>
-                                                        <input id="brand" :name="'credit_card[cars]['+key+'][model]'"
-                                                               placeholder="@lang('register::forms.form.credit_card.cars_model')"
-                                                               class="form-control input-sm" v-model="car.model"/>
+                                                    <div class="form-group @if($errors->first('vehicles.*.model')) has-error @endif">
+                                                        <label for="model"
+                                                               v-if="key == 0">@lang('register::forms.form.vehicles.model')</label>
+                                                        <input id="brand" :name="'vehicles['+key+'][model]'"
+                                                               placeholder="@lang('register::forms.form.vehicles.model')"
+                                                               class="form-control input-sm" v-model="vehicle.model"/>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.fuel')) has-error @endif">
+                                                    <div class="form-group @if($errors->first('vehicles.*.fuel')) has-error @endif">
                                                         <label for="fuel"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_fuel')</label>
-                                                        <select id="fuel" :name="'credit_card[cars]['+key+'][fuel]'"
-                                                                class="form-control" v-model="car.fuel">
+                                                               v-if="key == 0">@lang('register::forms.form.vehicles.fuel')</label>
+                                                        <select id="fuel" :name="'vehicles['+key+'][fuel]'"
+                                                                class="form-control" v-model="vehicle.fuel">
                                                             <option v-for="(fuel, index) in fuels" :value="index">@{{ fuel }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="form-group @if($errors->first('credit_card.cars.*.kit')) has-error @endif">
+                                                    <div class="form-group @if($errors->first('vehicles.*.kit')) has-error @endif">
                                                         <label for="kit"
-                                                               v-if="key == 0">@lang('register::forms.form.credit_card.cars_kit')</label>
-                                                        <select id="kit" :name="'credit_card[cars]['+key+'][kit]'"
-                                                                class="form-control" v-model="car.kit">
+                                                               v-if="key == 0">@lang('register::forms.form.vehicles.kit')</label>
+                                                        <select id="kit" :name="'vehicles['+key+'][kit]'"
+                                                                class="form-control" v-model="vehicle.kit">
                                                             <option v-for="(kit, index) in kits" :value="index">@{{ kit }}</option>
                                                         </select>
                                                     </div>
@@ -181,10 +181,10 @@
                                                     <label v-if="key == 0">&nbsp;</label>
                                                     <div class="form-group" style="padding: 10px">
                                                         <a class="btn-floating"
-                                                           v-on:click="addRow(key, 'cars')" v-if="cars.length < 20">
+                                                           v-on:click="addRow(key, 'vehicles')" v-if="vehicles.length < 20">
                                                             <i class="fa fa-plus"></i></a>
                                                         <a class="btn-floating"
-                                                           v-on:click="removeRow(key, 'cars')" v-if="cars.length > 1">
+                                                           v-on:click="removeRow(key, 'vehicles')" v-if="vehicles.length > 1">
                                                             <i class="fa fa-minus"></i></a>
                                                     </div>
                                                 </div>
@@ -335,18 +335,18 @@
                                                 <th>@lang('register::forms.form.credit_card.address')</th>
                                                 <td>: {!! $form->credit_card->address !!}</td>
                                             </tr>
-                                            @if(isset($form->credit_card->cars))
+                                            @if(isset($form->vehicles))
                                                 <tr>
-                                                    <th>@lang('register::forms.form.credit_card.cars')</th>
+                                                    <th>@lang('register::forms.form.vehicles.vehicles')</th>
                                                     <td>
-                                                        @foreach($form->credit_card->cars as $car)
+                                                        @foreach($form->vehicles as $vehicle)
                                                             <div style="display: inline-flex;">
                                                                 <div style="padding: 10px 20px" class="thumbnail">
-                                                                    <h4>{{ $car->plate }}</h4>
+                                                                    <h4>{{ $vehicle->plate }}</h4>
                                                                     <p>
-                                                                        {{ $car->brand.' '.$car->model }}<br/>
-                                                                        {{ $car->fuel }}<br/>
-                                                                        {{ $car->kit }}
+                                                                        {{ $vehicle->brand.' '.$vehicle->model }}<br/>
+                                                                        {{ $fuelTypes->get($vehicle->fuel) }}<br/>
+                                                                        {{ $kitTypes->get($vehicle->kit) }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -409,8 +409,8 @@
                                     </div>
                                 @endif
 
-                                @if(isset($form->credit_card->cars))
-                                    @if(array_search("1", array_column($form->credit_card->cars, "kit")) !== false)
+                                @if(isset($form->vehicles))
+                                    @if(array_search("1", array_column($form->vehicles, "kit")) !== false)
                                         {!! Form::normalTextarea('shipping_address', trans('register::forms.form.shipping_address'), $errors, $form, ['class'=>'form-control', 'rows'=>4]) !!}
                                     @endif
                                 @endif
@@ -465,18 +465,18 @@
                 collateral_id: '{{ old('collateral_id', $form->collateral_id) }}',
                 credit_card: '{{ setting('register::credit-card') }}',
                 collateral_types: {!! $collateralTypes !!},
-                cars: {!! old('credit_card.cars', @$form->credit_card->cars) ? json_encode(old('credit_card.cars', @$form->credit_card->cars)) : "[{ plate:'', brand: '', model: '', fuel: '1', kit: '1', }]" !!},
+                vehicles: {!! old('vehicles', @$form->vehicles) ? json_encode(old('vehicles', @$form->vehicles)) : "[{ plate:'', brand: '', model: '', fuel: '1', kit: '1', }]" !!},
                 fuels: {!! $fuelTypes->toJson() !!},
                 kits: {!! $kitTypes->toJson() !!}
             },
             methods: {
                 addRow: function (index, id) {
-                    this.cars.splice(index + 1, 0, {});
-                    this.cars[index + 1].fuel = '1';
-                    this.cars[index + 1].kit = '1';
+                    this.vehicles.splice(index + 1, 0, {});
+                    this.vehicles[index + 1].fuel = '1';
+                    this.vehicles[index + 1].kit = '1';
                 },
                 removeRow: function (index, id) {
-                    this.cars.splice(index, 1);
+                    this.vehicles.splice(index, 1);
                 },
                 collateralUpdate: function (index) {
                     this.collateral_code = this.collateral_types[index].code;
@@ -503,8 +503,9 @@
                     this.loading = false;
                     if( this.monthly_consumption > 0) {
                         this.timeout = setTimeout(()=>{
-                            axios.post('{{ route('register.form.rates') }}', {
-                                monthly_consumption: this.monthly_consumption
+                            axios.post('{{ route('admin.register.form.rates') }}', {
+                                monthly_consumption: this.monthly_consumption,
+                                form_id: {{ $form->id }}
                             })
                                 .then(response=>{
                                     this.percent = '%' + response.data.percent;

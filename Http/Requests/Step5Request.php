@@ -16,7 +16,7 @@ class Step5Request extends BaseFormRequest
     public function rules()
     {
         $form = request()->session()->get('form');
-        $kit = isset($form->credit_card->cars) ? array_search("1", array_column($form->credit_card->cars, "kit")) !== false ? 'required' : '' : '';
+        $kit = isset($form->vehicles) ? array_search("1", array_column($form->vehicles, "kit")) !== false ? 'required' : '' : '';
 
         return [
             'agreement1'       => 'required',

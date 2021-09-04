@@ -103,4 +103,19 @@ class FormController extends AdminBaseController
         return redirect()->route('admin.register.form.index')
             ->withSuccess(trans('core::core.messages.resource deleted', ['name' => trans('register::forms.title.forms')]));
     }
+
+    public function rates(Request $request)
+    {
+        $monthly_consumption = $request->get('monthly_consumption');
+        $form_id = $request->get('form_id');
+        $form = $this->form->find($form_id);
+
+        $collateral = new CollateralService($form);
+        $form->monthly_consumption = $monthly_consumption;
+        $rate = $collateral->findRangeRate();
+
+        $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
+
+        return response()->json(['success' => 'Success', 'percent' => $rate['percent'], 'price' => $discounted_price]);
+    }
 }

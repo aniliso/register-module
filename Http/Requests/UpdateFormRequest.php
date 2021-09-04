@@ -30,11 +30,11 @@ class UpdateFormRequest extends BaseFormRequest
             'credit_card.provision_amount' => "required_if:collateral_id,==,$id",
             'credit_card.phone'            => "required_if:collateral_id,==,$id",
             'credit_card.agree'            => "required_if:collateral_id,==,$id",
-            'credit_card.cars.*.plate'     => "required_if:collateral_id,==,$id",
-            'credit_card.cars.*.brand'     => 'required_with:credit_card.cars.*.plate',
-            'credit_card.cars.*.model'     => 'required_with:credit_card.cars.*.plate',
-            'credit_card.cars.*.fuel'      => 'required_with:credit_card.cars.*.plate',
-            'credit_card.cars.*.kit'       => 'required_with:credit_card.cars.*.plate',
+            'vehicles.*.plate'             => "required_with:collateral_id",
+            'vehicles.*.brand'             => 'required_with:collateral_id',
+            'vehicles.*.model'             => 'required_with:collateral_id',
+            'vehicles.*.fuel'              => 'required_with:collateral_id',
+            'vehicles.*.kit'               => 'required_with:collateral_id',
 
             'collateral_amount'   => 'required',
             'monthly_consumption' => 'required'

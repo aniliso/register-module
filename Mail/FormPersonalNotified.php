@@ -40,6 +40,11 @@ class FormPersonalNotified extends Mailable
         $collateral = new CollateralService($form);
         $rate = $collateral->findRangeRate();
 
+        if(isset($rate['file'])) {
+            $path = public_path($rate['file']['path']);
+            $this->attach($path);
+        }
+
         if($form->files()->count()>0) {
             $files = $form->files()->get();
             foreach ($files as $file) {
