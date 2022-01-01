@@ -214,8 +214,8 @@ class PublicController extends BasePublicController
             $this->returnStep1($request);
             $form = $request->session()->get('form');
 
-            if (!$this->mobileService->getVerificationCode($form->present()->mobile_phone)) {
-                $this->mobileService->sendVerificationCode($form->present()->mobile_phone);
+            if (!$this->mobileService->getVerificationCode('0'.$form->present()->mobile_phone)) {
+                $this->mobileService->sendVerificationCode('0'.$form->present()->mobile_phone);
                 $message = "Doğrulama kodu mesajı başarıyla gönderildi.";
             } else {
                 $message = "Doğrulama kodu mesajınızı henüz doğrulamadınız. Lütfen kısa mesajınızın gelmesini bekleyiniz";
@@ -235,7 +235,7 @@ class PublicController extends BasePublicController
             $this->returnStep1($request);
             $form = $request->session()->get('form');
             $code = $request->get('verificationCode');
-            if($response = $this->mobileService->validateVerificationCode($form->present()->mobile_phone, $code)) {
+            if($response = $this->mobileService->validateVerificationCode('0'.$form->present()->mobile_phone, $code)) {
                 $formComplete = $request->session()->get('form');
                 $formComplete->save();
 
