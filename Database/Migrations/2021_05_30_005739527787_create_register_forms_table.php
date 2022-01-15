@@ -24,7 +24,7 @@ class CreateRegisterFormsTable extends Migration
             $table->string('email');
             $table->string('work_phone');
             $table->string('mobile_phone');
-            $table->string('reference_no');
+            $table->string('reference_no')->nullable();
 
             $table->integer('collateral_id')->unsigned()->nullable();
             $table->foreign('collateral_id')->references('id')->on('register__collaterals')->onDelete('SET NULL');
