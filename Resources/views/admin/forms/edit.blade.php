@@ -229,7 +229,7 @@
                                             <table class="table table-bordered table-striped">
                                                 <tr>
                                                     <th style="width: 25%;">İskonto Yüzdesi</th>
-                                                    <td>: @{{ percent }}</td>
+                                                    <td>: @{{ percent }} <input type="hidden" name="discount_rate" value="@{{ percent }}" /></td>
                                                     <th style="width: 25%;">Aylık Tüketim Oranına Göre İndirim</th>
                                                     <td>: @{{ price }}</td>
                                                 </tr>
@@ -369,9 +369,9 @@
                                         </tr>
                                         <tr>
                                             <th style="width: 25%;">İskonto Yüzdesi</th>
-                                            <td>: %{{ $rate['percent'] }}</td>
+                                            <td>: %{{ @$form->discount_rate }}</td>
                                             <th style="width: 25%;">Aylık Tüketim Oranına Göre İndirim</th>
-                                            <td>: {!! number_format(($rate['percent'] / 100) * $form->monthly_consumption, 2) !!} TL</td>
+                                            <td>: {!! number_format((@$form->discount_rate / 100) * $form->monthly_consumption, 2) !!} TL</td>
                                         </tr>
                                         @if(isset($rate['file']))
                                             <tr>

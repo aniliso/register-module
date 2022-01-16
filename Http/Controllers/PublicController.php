@@ -119,6 +119,11 @@ class PublicController extends BasePublicController
             $this->returnStep1($request);
 
             $form = $request->session()->get('form');
+
+            $collateral = new CollateralService($form);
+            $rate = $collateral->findRangeRate();
+            $form->discount_rate = $rate['percent'];
+
             $form->fill($request->all());
             $request->session()->put('form', $form);
 

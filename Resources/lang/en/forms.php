@@ -52,7 +52,16 @@ return [
         'agreement2'          => 'Customer Clarification Text',
         'reference_no'        => 'Reference No'
     ],
+    'fuel_types'       => [
+        'gas'    => 'Gas',
+        'diesel' => 'Diesel'
+    ],
+    'kit_types'        => [
+        'card' => 'Automatic Card',
+        'ring' => 'Smart Ring'
+    ],
     'messages'         => [
+        'loading' => 'Loading...'
     ],
     'validation'       => [
     ],
@@ -62,5 +71,14 @@ return [
         'step-3' => 'Collateral/Consumption',
         'step-4' => 'Application Files',
         'step-5' => 'Complete Application'
+    ],
+    'collateral'       => [
+        'forms'                => 'Collateral Forms',
+        'discount percentage'  => 'Discount Percentage',
+        'discount consumption' => 'Discount by Rate of Monthly Consumption'
+    ],
+    'agreement'        => [
+        'check1' => 'I read and agree "KVKK PROSEDÜRÜ" on our website.',
+        'check2' => 'I read and agree "MÜŞTERİ AYDINLATMA METNİ" and "TTS MÜŞTERİ AYDINLATMA METNİ" on our website.'
     ]
 ];

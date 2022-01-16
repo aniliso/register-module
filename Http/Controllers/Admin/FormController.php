@@ -114,7 +114,12 @@ class FormController extends AdminBaseController
         $form->monthly_consumption = $monthly_consumption;
         $rate = $collateral->findRangeRate();
 
-        $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
+        if($form->discount_rate) {
+            $discounted_price = number_format(($form->discount_rate / 100) * $monthly_consumption, 2);
+        } else {
+            $discounted_price = number_format(($rate['percent'] / 100) * $monthly_consumption, 2);
+        }
+
 
         return response()->json(['success' => 'Success', 'percent' => $rate['percent'], 'price' => $discounted_price]);
     }

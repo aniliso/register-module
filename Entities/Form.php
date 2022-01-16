@@ -12,13 +12,14 @@ class Form extends Model
 
     protected $table = 'register__forms';
     protected $fillable = [
-        'reference_no', 'company', 'identity_no', 'signatory', 'email', 'work_phone', 'mobile_phone', 'collateral_id', 'collateral_amount', 'monthly_consumption', 'credit_card', 'shipping_address', 'agreement1', 'agreement2', 'vehicles'
+        'reference_no', 'company', 'identity_no', 'signatory', 'email', 'work_phone', 'mobile_phone', 'collateral_id', 'collateral_amount', 'monthly_consumption', 'credit_card', 'shipping_address', 'agreement1', 'agreement2', 'vehicles', 'discount_rate'
     ];
     protected $casts = [
         'credit_card'            => 'object',
         'vehicles'               => 'object',
         'collateral_amount'      => 'float',
-        'monthly_consumption'    => 'float'
+        'monthly_consumption'    => 'float',
+        'discount_rate'          => 'float'
     ];
 
     protected $presenter = FormPresenter::class;

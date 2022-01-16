@@ -46,7 +46,7 @@
 | @lang('register::forms.form.collateral_amount') | {{ number_format($form->collateral_amount, 2) }} TL |
 | @lang('register::forms.form.monthly_consumption') | {{ number_format($form->monthly_consumption, 2) }} TL |
 | İskonto Yüzdesi | %{{ $rate['percent'] }} |
-| Aylık Tüketim Oranına Göre İndirim | {!! number_format(($rate['percent'] / 100) * $form->monthly_consumption, 2) !!} TL |
+| Aylık Tüketim Oranına Göre İndirim | {!! number_format(($form->discount_rate / 100) * $form->monthly_consumption, 2) !!} TL |
 
 @component('mail::footer')
 <hr>
